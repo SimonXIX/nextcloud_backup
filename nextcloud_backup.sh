@@ -12,7 +12,7 @@
 ############################################################
 
 DATE=$(date +'%Y-%m-%d')
-DATA_DIRECTORY_SIZE=$(du -sb "$LOCAL_DATA_DIRECTORY" | awk '{print $1}')
+DATA_DIRECTORY_SIZE=$(du -sb -- "$LOCAL_DATA_DIRECTORY" | awk '{print $1}')
 
 ############################################################
 # subprograms                                              #
