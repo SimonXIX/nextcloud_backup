@@ -12,6 +12,7 @@
 ############################################################
 
 DATE=$(date +'%Y-%m-%d')
+DATA_DIRECTORY_SIZE=$(du -sb "$LOCAL_DATA_DIRECTORY" | awk '{print $1}')
 
 ############################################################
 # subprograms                                              #
@@ -72,7 +73,7 @@ Backup_Nextcloud_database()
 Backup_Nextcloud_data()
 {
     echo "backing up data directory (this may take a while)..."
-    tar -czf - -C $(dirname $LOCAL_DATA_DIRECTORY) $(basename $LOCAL_DATA_DIRECTORY) | pv | pigz | \
+    tar -czf - -C $(dirname $LOCAL_DATA_DIRECTORY) $(basename $LOCAL_DATA_DIRECTORY) | pv -s $DATA_DIRECTORY_SIZE | pigz | \
     ssh -i $PRIVATE_KEY $REMOTE_USER@$REMOTE_HOST \
         "cat > $REMOTE_DIRECTORY/$DATE/nextcloud_data.tgz"
 }
