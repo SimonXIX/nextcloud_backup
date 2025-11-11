@@ -55,7 +55,6 @@ Create_remote_backup_directory()
 Backup_Nextcloud_config()
 {
     echo "backing up config directory..."
-    tar -czf - -C $LOCAL_CONFIG_DIRECTORY .
     tar -czf - -C $(dirname $LOCAL_CONFIG_DIRECTORY) $(basename $LOCAL_CONFIG_DIRECTORY) | \
     ssh -i $PRIVATE_KEY $REMOTE_USER@$REMOTE_HOST \
         "cat > $REMOTE_DIRECTORY/$DATE/nextcloud_config.tgz"
