@@ -77,11 +77,6 @@ Backup_Nextcloud_data()
         "cat > $REMOTE_DIRECTORY/$DATE/nextcloud_data.tgz"
 }
 
-Exit(){
-    echo "✅ Backup successfully pushed to $REMOTE_HOST:$REMOTE_BACKUP_DIR/$DATE"
-    exit 0
-}
-
 ############################################################
 ############################################################
 # main program                                             #
