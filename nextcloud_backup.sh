@@ -11,7 +11,7 @@
 # variables                                                #
 ############################################################
 
-DATE=$(date +'%Y%m%d')
+DATE=$(date +'%Y-%m-%d')
 
 ############################################################
 # subprograms                                              #
@@ -43,7 +43,7 @@ Help()
 
 Database_export()
 {
-    docker exec -it $DATABASE_CONTAINER mysqldump --single-transaction -u $DATABASE_USERNAME -p$DATABASE_PASSWORD $DATABASE > $LOCAL_DIRECTORY/nextcloud-sqlbkp_$DATE.sql
+    docker exec -it $DATABASE_CONTAINER mysqldump --single-transaction -u $DATABASE_USERNAME -p$DATABASE_PASSWORD $DATABASE > $LOCAL_DIRECTORY/nextcloud_database_$DATE.sql
 }
 
 Create_remote_backup_directory()
@@ -57,16 +57,16 @@ Backup_Nextcloud_config()
     echo "backing up config directory..."
     tar -czf - -C $(dirname $LOCAL_CONFIG_DIRECTORY) $(basename $LOCAL_CONFIG_DIRECTORY) | \
     ssh -i $PRIVATE_KEY $REMOTE_USER@$REMOTE_HOST \
-        "cat > $REMOTE_DIR_DIRECTORY/$DATE/nextcloud_config.tgz"
+        "cat > $REMOTE_DIRECTORY/$DATE/nextcloud_config.tgz"
 }
 
 Backup_Nextcloud_database()
 {
     echo "backing up database..."
     Database_export
-    scp -i $PRIVATE_KEY $LOCAL_DIRECTORY/nextcloud-sqlbkp_$DATE.sql \
+    scp -i $PRIVATE_KEY $LOCAL_DIRECTORY/nextcloud_database_$DATE.sql \
         $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIRECTORY/$DATE/
-    rm -f $LOCAL_DIRECTORY//nextcloud-sqlbkp_$DATE.sql
+    rm -f $LOCAL_DIRECTORY/nextcloud_database_$DATE.sql
 }
 
 Backup_Nextcloud_data()
